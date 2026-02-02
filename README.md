@@ -22,7 +22,7 @@ AkitaLLM is a command-line interface (CLI) that helps you manage codebases with 
 
 ```bash
 # Clone the repository
-git clone https://github.com/KerubinDev/AkitaLLM.git
+git clone https://github.com/Your-Name/AkitaLLM.git
 cd AkitaLLM
 
 # Install in editable mode
