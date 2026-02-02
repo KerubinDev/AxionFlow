@@ -1,0 +1,28 @@
+[project]
+name = "akitallm"
+version = "0.1.0"
+description = "AkitaLLM: An open-source local-first AI system for programming."
+authors = [{ name = "KerubinDev" }]
+requires-python = ">=3.10"
+dependencies = [
+    "typer[all]",
+    "litellm",
+    "pydantic",
+    "rich",
+    "python-dotenv",
+    "pytest",
+    "pytest-mock",
+    "gitpython",
+    "tomli-w",
+]
+
+[project.scripts]
+akita = "akita.cli.main:app"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
