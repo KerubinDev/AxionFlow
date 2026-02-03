@@ -1,6 +1,7 @@
 from typing import List, Dict, Any, Optional
 from akita.models.base import AIModel, get_model
-from akita.tools.base import ShellTools, FileSystemTools
+from akita.tools.base import ShellTools
+from akita.core.plugins import PluginManager
 from akita.tools.context import ContextBuilder
 from akita.schemas.review import ReviewResult
 import json
@@ -11,6 +12,8 @@ console = Console()
 class ReasoningEngine:
     def __init__(self, model: AIModel):
         self.model = model
+        self.plugin_manager = PluginManager()
+        self.plugin_manager.discover_all()
 
     def run_review(self, path: str) -> ReviewResult:
         """
@@ -101,9 +104,12 @@ class ReasoningEngine:
         
         files_str = "\n---\n".join([f"FILE: {f.path}\nCONTENT:\n{f.content}" for f in snapshot.files[:10]]) # Limit for solve
         
+        tools_info = "\n".join([f"- {t['name']}: {t['description']}" for t in self.plugin_manager.get_all_tools()])
+        
         system_prompt = (
             "You are an Expert Programmer. Solve the requested task by providing code changes in Unified Diff format. "
-            "Respond ONLY with the Diff block. Use +++ and --- with file paths relative to project root."
+            "Respond ONLY with the Diff block. Use +++ and --- with file paths relative to project root.\n\n"
+            f"Available Tools:\n{tools_info}"
         )
         user_prompt = f"Task: {query}\n\nContext:\n{files_str}\n\nGenerate the Unified Diff."
         

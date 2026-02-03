@@ -44,6 +44,9 @@ akita = "akita.cli.main:app"
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[project.entry-points."akitallm.plugins"]
+files = "akita.plugins.files:FilesPlugin"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
