@@ -8,9 +8,9 @@ This document outlines the strategic steps required to transition AkitaLLM from 
 - [ ] **Pre-flight Validation**: Automatically run tests or linters on the proposed diff before application.
 
 ## 🧠 Phase 2: Intelligent Context (AST & Semantics)
-- [ ] **AST Integration**: Use `Tree-sitter` to parse code structure and allow granular item targeting (classes, methods).
-- [ ] **Dependency Grafting**: Automatically include relevant imported files in the LLM context.
-- [ ] **Context Budgeting**: Intelligent token management to avoid hitting context limits on large files.
+- [x] **AST Integration**: Use `Tree-sitter` to parse code structure and allow granular item targeting (classes, methods).
+- [x] **Dependency Grafting**: Automatically include relevant imported files in the LLM context.
+- [x] **Context Budgeting**: Intelligent token management to avoid hitting context limits on large files.
 
 ## 🔌 Phase 3: Plugin Architecture (Extensibility)
 - [ ] **Plugin Engine**: Implement a plugin system using Python `entry_points`.

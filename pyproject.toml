@@ -28,6 +28,8 @@ dependencies = [
     "tomli-w",
     "tomli",
     "whatthepatch",
+    "tree-sitter",
+    "tree-sitter-python",
 ]
 
 [project.urls]

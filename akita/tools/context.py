@@ -7,6 +7,7 @@ class FileContext(BaseModel):
     path: str
     content: str
     extension: str
+    summary: Optional[str] = None # New field for semantic summary
 
 class ContextSnapshot(BaseModel):
     files: List[FileContext]
@@ -19,13 +20,22 @@ class ContextBuilder:
         extensions: Optional[List[str]] = None,
         exclude_dirs: Optional[List[str]] = None,
         max_file_size_kb: int = 50,
-        max_files: int = 50
+        max_files: int = 50,
+        use_semantical_context: bool = True
     ):
         self.base_path = Path(base_path)
         self.extensions = extensions or [".py", ".js", ".ts", ".cpp", ".h", ".toml", ".md", ".json"]
         self.exclude_dirs = exclude_dirs or [".git", ".venv", "node_modules", "__pycache__", "dist", "build"]
         self.max_file_size_kb = max_file_size_kb
         self.max_files = max_files
+        self.use_semantical_context = use_semantical_context
+        
+        if self.use_semantical_context:
+            try:
+                from akita.core.ast_utils import ASTParser
+                self.ast_parser = ASTParser()
+            except ImportError:
+                self.ast_parser = None
 
     def build(self) -> ContextSnapshot:
         """Scan the path and build a context snapshot."""
@@ -66,8 +76,12 @@ class ContextBuilder:
         if not path.exists():
             return False
             
-        # Check size
-        if path.stat().st_size > self.max_file_size_kb * 1024:
+        # Check size (we can be more lenient if using semantic summaries)
+        size_limit = self.max_file_size_kb * 1024
+        if self.use_semantical_context:
+            size_limit *= 2 # Allow larger files if we can summarize them
+            
+        if path.stat().st_size > size_limit:
             return False
             
         return True
@@ -76,10 +90,22 @@ class ContextBuilder:
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 content = f.read()
+                
+                summary = None
+                if self.use_semantical_context and self.ast_parser and path.suffix == ".py":
+                    try:
+                        defs = self.ast_parser.get_definitions(str(path))
+                        if defs:
+                            summary_lines = [f"{d['type'].upper()} {d['name']} (L{d['start_line']}-L{d['end_line']})" for d in defs]
+                            summary = "\n".join(summary_lines)
+                    except Exception:
+                        pass
+
                 return FileContext(
                     path=str(path.relative_to(self.base_path) if self.base_path.is_dir() else path.name),
                     content=content,
-                    extension=path.suffix
+                    extension=path.suffix,
+                    summary=summary
                 )
         except Exception:
             return None
