@@ -64,7 +64,7 @@ AkitaLLM was built to bridge this gap, treating AI as a component of a larger, h
 
 ## Installation
 
-AkitaLLM is available on PyPI. It requires Python 3.10 or later.
+AkitaLLM is available on PyPI. You can install it directly using pip:
 
 ```bash
 pip install akitallm
