@@ -1,5 +1,12 @@
 # AkitaLLM
 
+![PyPI](https://img.shields.io/pypi/v/akitallm)
+![Python](https://img.shields.io/pypi/pyversions/akitallm)
+![License](https://img.shields.io/github/license/KerubinDev/AkitaLLM)
+[![Tests](https://img.shields.io/github/actions/workflow/status/KerubinDev/AkitaLLM/tests.yml)](https://github.com/KerubinDev/AkitaLLM/actions)
+![Downloads](https://img.shields.io/pypi/dm/akitallm)
+
+
 ```
 
 Analyze → Plan → Execute → Validate
