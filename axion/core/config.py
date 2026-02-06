@@ -34,7 +34,7 @@ def load_config() -> Optional[Dict[str, Any]]:
         return None
 
 def save_config(config: Dict[str, Any]):
-    """Save configuration to ~/.akita/config.toml."""
+    """Save configuration to ~/.axion/config.toml."""
     ensure_config_dir()
     with open(CONFIG_FILE, "wb") as f:
         tomli_w.dump(config, f)

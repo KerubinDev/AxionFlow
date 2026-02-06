@@ -1,13 +1,13 @@
 from typing import List, Dict, Any, Optional
-from akita.models.base import AIModel, get_model
-from akita.tools.base import ShellTools
-from akita.core.plugins import PluginManager
-from akita.tools.context import ContextBuilder
-from akita.schemas.review import ReviewResult
-from akita.core.trace import ReasoningTrace
-from akita.reasoning.session import ConversationSession
+from axion.models.base import AIModel, get_model
+from axion.tools.base import ShellTools
+from axion.core.plugins import PluginManager
+from axion.tools.context import ContextBuilder
+from axion.schemas.review import ReviewResult
+from axion.core.trace import ReasoningTrace
+from axion.reasoning.session import ConversationSession
 import json
-from akita.core.i18n import t
+from axion.core.i18n import t
 import pydantic
 from rich.console import Console
 
@@ -217,7 +217,7 @@ class ReasoningEngine:
     def _execute(self, plan: str) -> Any:
         console.print("🚀 [dim]Executing plan...[/]")
         # Placeholder for diff generation
-        diff = "--- main.py\n+++ main.py\n@@ -1,1 +1,2 @@\n-print('hello')\n+print('hello world')\n+print('Akita was here')"
+        diff = "--- main.py\n+++ main.py\n@@ -1,1 +1,2 @@\n-print('hello')\n+print('hello world')\n+print('Axion was here')"
         return {"diff": diff}
 
     def _validate(self, results: Any) -> str:

@@ -15,7 +15,7 @@ Analyze → Plan → Execute → Validate
 
 **A deterministic, local-first AI orchestrator for software engineers.**
 
-AkitaLLM is not a chat interface.
+Axion is not a chat interface.
 It is not autocomplete.
 It is not “AI magic”.
 
@@ -23,9 +23,9 @@ It is an engineering tool.
 
 ---
 
-## What AkitaLLM is (and what it is not)
+## What Axion is (and what it is not)
 
-AkitaLLM treats Large Language Models as **non-deterministic execution engines** that must operate inside a **strict, auditable pipeline**.
+Axion treats Large Language Models as **non-deterministic execution engines** that must operate inside a **strict, auditable pipeline**.
 
 Instead of asking an AI *“please fix my code”*, you force it to:
 
@@ -56,13 +56,13 @@ That mismatch causes real problems:
 - Developers approve changes they don’t fully understand
 - Bugs are pushed faster, not fewer
 
-AkitaLLM exists to **slow AI down** and force it to behave like a junior engineer working under strict supervision.
+Axion exists to **slow AI down** and force it to behave like a junior engineer working under strict supervision.
 
 ---
 
 ## The core difference
 
-| Aspect | Typical AI Tools | AkitaLLM |
+| Aspect | Typical AI Tools | Axion |
 |------|-----------------|----------|
 | Interaction | Chat / Autocomplete | Structured pipeline |
 | Control | Implicit | Explicit and reviewable |
@@ -76,7 +76,7 @@ AkitaLLM exists to **slow AI down** and force it to behave like a junior enginee
 ## Design principles
 
 **Local-first**  
-Your code stays on your machine. AkitaLLM runs locally and only sends what is strictly necessary to the model.
+Your code stays on your machine. Axion runs locally and only sends what is strictly necessary to the model.
 
 **No magic**  
 Every decision is logged. Every step is inspectable. Every change is explicit.
@@ -89,7 +89,7 @@ Nothing is applied without your approval.
 
 ---
 
-## What AkitaLLM can do today
+## What Axion can do today
 
 - 🔍 **Structural code reviews**  
   Detect bugs, architectural risks, performance issues, and security problems.
@@ -149,9 +149,9 @@ Analyze → Plan → Execute → Validate
 
 ---
 
-## Extending AkitaLLM
+## Extending Axion
 
-AkitaLLM is designed to be extended by engineers.
+Axion is designed to be extended by engineers.
 
 * Custom tools
 * Custom validators
@@ -163,7 +163,7 @@ See the [Plugin Development Guide](PLUGINS.md).
 
 ## Contributing
 
-AkitaLLM is not looking for volume.
+Axion is not looking for volume.
 It is looking for **engineering-quality contributions**.
 
 If you care about:

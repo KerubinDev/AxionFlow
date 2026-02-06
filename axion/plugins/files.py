@@ -1,8 +1,8 @@
-from akita.core.plugins import AkitaPlugin
-from akita.tools.base import FileSystemTools
+from axion.core.plugins import AxionPlugin
+from axion.tools.base import FileSystemTools
 from typing import List, Dict, Any
 
-class FilesPlugin(AkitaPlugin):
+class FilesPlugin(AxionPlugin):
     @property
     def name(self) -> str:
         return "files"

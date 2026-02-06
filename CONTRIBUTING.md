@@ -1,14 +1,14 @@
-# Contributing to AkitaLLM
+# Contributing to Axion
 
-Welcome! We are thrilled that you want to contribute to AkitaLLM. This project aims to be the most reliable local-first AI system for programmers.
+Welcome! We are thrilled that you want to contribute to Axion. This project aims to be the most reliable local-first AI system for programmers.
 
 ## 🚀 How to Get Started
 
 ### 1. Fork and Clone
 Fork the repository on GitHub and clone your fork locally:
 ```bash
-git clone https://github.com/YOUR_USERNAME/AkitaLLM.git
-cd AkitaLLM
+git clone https://github.com/YOUR_USERNAME/Axion.git
+cd Axion
 ```
 
 ### 2. Environment Setup
@@ -50,4 +50,4 @@ pytest
 - New **Tools** (e.g., Linter integration, AST parsers).
 - Bug fixes and documentation improvements.
 
-Thank you for helping AkitaLLM grow! 🚀
+Thank you for helping Axion grow! 🚀

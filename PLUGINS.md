@@ -1,11 +1,11 @@
-# 🔌 AkitaLLM Plugin Development Guide
+# 🔌 Axion Plugin Development Guide
 
-AkitaLLM is designed to be infinitely extensible. You can add new capabilities (tools) to the reasoning engine by creating official or third-party plugins.
+Axion is designed to be infinitely extensible. You can add new capabilities (tools) to the reasoning engine by creating official or third-party plugins.
 
 ## 🏗️ Technical Architecture
 
-AkitaLLM uses a **hybrid plugin model**:
-1.  **Internal Plugins**: Located in `akita/plugins/`.
+Axion uses a **hybrid plugin model**:
+1.  **Internal Plugins**: Located in `axion/plugins/`.
 2.  **External Plugins**: Scalable third-party packages installed via `pip` that register themselves using Python `entry_points`.
 
 ---
@@ -13,13 +13,13 @@ AkitaLLM uses a **hybrid plugin model**:
 ## 🚀 Creating Your First Plugin
 
 ### 1. The Plugin Interface
-Every plugin must inherit from `AkitaPlugin` and implement the required properties and methods.
+Every plugin must inherit from `AxionPlugin` and implement the required properties and methods.
 
 ```python
-from akita.core.plugins import AkitaPlugin
+from axion.core.plugins import AxionPlugin
 from typing import List, Dict, Any
 
-class MyAwesomePlugin(AkitaPlugin):
+class MyAwesomePlugin(AxionPlugin):
     @property
     def name(self) -> str:
         return "awesome_tool"
@@ -44,18 +44,18 @@ def my_internal_function(mass: float, radius: float) -> str:
 ```
 
 ### 2. Registration (The Magic)
-To make your plugin discoverable by AkitaLLM, you need to register it in your `pyproject.toml` or `setup.py`.
+To make your plugin discoverable by Axion, you need to register it in your `pyproject.toml` or `setup.py`.
 
 #### Using `pyproject.toml`:
 ```toml
-[project.entry-points."akitallm.plugins"]
+[project.entry-points."axion.plugins"]
 awesome = "my_package.module:MyAwesomePlugin"
 ```
 
 ### 3. How Discovery Works
 When `ReasoningEngine` starts, the `PluginManager` scans:
-1.  The local `akita/plugins/` directory.
-2.  All installed Python packages for the `akitallm.plugins` entry point group.
+1.  The local `axion/plugins/` directory.
+2.  All installed Python packages for the `axion.plugins` entry point group.
 
 ---
 
@@ -68,11 +68,11 @@ When `ReasoningEngine` starts, the `PluginManager` scans:
 You can verify if your plugin is being loaded by running this snippet:
 
 ```python
-from akita.core.plugins import PluginManager
+from axion.core.plugins import PluginManager
 pm = PluginManager()
 pm.discover_all()
 print(pm.plugins.keys())
 ```
 
 ---
-Happy Akitando! 🐶🚀
+Happy Axionndo! 🐶🚀

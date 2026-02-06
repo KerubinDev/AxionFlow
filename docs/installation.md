@@ -1,19 +1,19 @@
 # Installation
 
-Getting started with AkitaLLM is easy.
+Getting started with Axion is easy.
 
 ## Standard Installation
 ```bash
-pip install akitallm
+pip install axion
 ```
 
 ## First Time Setup
-After installing, run any command (like `akita solve`) to start the onboarding process.
-Akita will guide you through configuring your preferred LLM (OpenAI, Ollama, Anthropic, etc.).
+After installing, run any command (like `axion solve`) to start the onboarding process.
+Axion will guide you through configuring your preferred LLM (OpenAI, Ollama, Anthropic, etc.).
 
 ## Development Install
 ```bash
-git clone https://github.com/KerubinDev/AkitaLLM.git
-cd AkitaLLM
+git clone https://github.com/KerubinDev/Axion.git
+cd Axion
 pip install -e .
 ```

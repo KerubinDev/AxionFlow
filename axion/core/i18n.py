@@ -1,9 +1,9 @@
 from typing import Dict, Any, Optional
-from akita.core.config import get_config_value
+from axion.core.config import get_config_value
 
 TRANSLATIONS = {
     "en": {
-        "onboarding.welcome": "[bold cyan]AkitaLLM Configuration[/]\n\n[italic]API-first setup...[/]",
+        "onboarding.welcome": "[bold cyan]Axion Configuration[/]\n\n[italic]API-first setup...[/]",
         "onboarding.api_key_prompt": "🔑 Paste your API Key (or type 'ollama' for local)",
         "onboarding.provider_detected": "[bold green]✅ Detected Provider:[/] {provider}",
         "onboarding.models_consulting": "[bold blue]Consulting {provider} API for available models...",
@@ -44,10 +44,10 @@ TRANSLATIONS = {
         "config.menu.prompt": "Select an option",
         "config.current_title": "Current Configuration",
         
-        "welcome.title": "[bold cyan]Welcome to AkitaLLM[/]",
+        "welcome.title": "[bold cyan]Welcome to Axion[/]",
         "welcome.subtitle": "A deterministic AI orchestrator for programmers.",
-        "welcome.help_hint": "[dim]Run [bold]akita --help[/] to see all commands.[/]",
-        "welcome.commands": "[bold]Common Commands:[/]\n- [cyan]akita solve[/]: Solve a coding task\n- [cyan]akita review[/]: Audit current directory\n- [cyan]akita config[/]: Manage settings",
+        "welcome.help_hint": "[dim]Run [bold]axion --help[/] to see all commands.[/]",
+        "welcome.commands": "[bold]Common Commands:[/]\n- [cyan]axion solve[/]: Solve a coding task\n- [cyan]axion review[/]: Audit current directory\n- [cyan]axion config[/]: Manage settings",
 
         "doctor.checking": "🩺 Checking system health...",
         "doctor.python": "Python Version",
@@ -67,10 +67,10 @@ TRANSLATIONS = {
         "diff.summary": "[bold]Changes summary:[/]\n- {files} files changed\n- [green]+{insertions}[/] / [red]-{deletions}[/] lines\n",
         
         "error.global_title": "Unexpected Error",
-        "error.global_hint": "Run with [bold]--debug[/] or set [bold]AKITA_DEBUG=1[/] to see the full traceback.",
+        "error.global_hint": "Run with [bold]--debug[/] or set [bold]AXION_DEBUG=1[/] to see the full traceback.",
     },
     "pt": {
-        "onboarding.welcome": "[bold cyan]Configuração do AkitaLLM[/]\n\n[italic]Configuração API-first...[/]",
+        "onboarding.welcome": "[bold cyan]Configuração do Axion[/]\n\n[italic]Configuração API-first...[/]",
         "onboarding.api_key_prompt": "🔑 Cole sua API Key (ou digite 'ollama' para local)",
         "onboarding.provider_detected": "[bold green]✅ Provedor Detectado:[/] {provider}",
         "onboarding.models_consulting": "[bold blue]Consultando API {provider} para modelos disponíveis...",
@@ -111,10 +111,10 @@ TRANSLATIONS = {
         "config.menu.prompt": "Selecione uma opção",
         "config.current_title": "Configuração Atual",
         
-        "welcome.title": "[bold cyan]Bem-vindo ao AkitaLLM[/]",
+        "welcome.title": "[bold cyan]Bem-vindo ao Axion[/]",
         "welcome.subtitle": "Um orquestrador de IA determinístico para programadores.",
-        "welcome.help_hint": "[dim]Execute [bold]akita --help[/] para ver todos os comandos.[/]",
-        "welcome.commands": "[bold]Comandos Comuns:[/]\n- [cyan]akita solve[/]: Resolver uma tarefa\n- [cyan]akita review[/]: Auditar diretório\n- [cyan]akita config[/]: Gerenciar configurações",
+        "welcome.help_hint": "[dim]Execute [bold]axion --help[/] para ver todos os comandos.[/]",
+        "welcome.commands": "[bold]Comandos Comuns:[/]\n- [cyan]axion solve[/]: Resolver uma tarefa\n- [cyan]axion review[/]: Auditar diretório\n- [cyan]axion config[/]: Gerenciar configurações",
 
         "doctor.checking": "🩺 Verificando integridade do sistema...",
         "doctor.python": "Versão Python",
@@ -134,7 +134,7 @@ TRANSLATIONS = {
         "diff.summary": "[bold]Resumo das mudanças:[/]\n- {files} arquivos alterados\n- [green]+{insertions}[/] / [red]-{deletions}[/] linhas\n",
 
         "error.global_title": "Erro Inesperado",
-        "error.global_hint": "Execute com [bold]--debug[/] ou defina [bold]AKITA_DEBUG=1[/] para ver o traceback completo.",
+        "error.global_hint": "Execute com [bold]--debug[/] ou defina [bold]AXION_DEBUG=1[/] para ver o traceback completo.",
     }
 }
 

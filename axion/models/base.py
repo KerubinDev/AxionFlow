@@ -1,7 +1,7 @@
 import litellm
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
-from akita.core.config import get_config_value
+from axion.core.config import get_config_value
 
 class Message(BaseModel):
     role: str

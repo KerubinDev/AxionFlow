@@ -3,7 +3,7 @@ import json
 import re
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-from akita.core.ast_utils import ASTParser
+from axion.core.ast_utils import ASTParser
 
 class CodeIndexer:
     """
@@ -13,7 +13,7 @@ class CodeIndexer:
     """
     def __init__(self, project_path: str):
         self.project_path = Path(project_path)
-        self.index_file = self.project_path / ".akita" / "index.json"
+        self.index_file = self.project_path / ".axion" / "index.json"
         self.ast_parser = ASTParser()
         self.data: List[Dict[str, Any]] = []
         self.load_index()
@@ -35,7 +35,7 @@ class CodeIndexer:
         """Index all Python files in the project."""
         self.data = []
         for root, _, files in os.walk(self.project_path):
-            if ".akita" in root or ".git" in root or "__pycache__" in root:
+            if ".axion" in root or ".git" in root or "__pycache__" in root:
                 continue
                 
             for file in files:

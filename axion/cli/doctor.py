@@ -57,7 +57,7 @@ def run_doctor(ctx: typer.Context):
                  # Ideally we reuse the robust logic from main but let's instantiate basic
                  # For now, let's use detect_provider if we can resolve the key
                  # Or just try to get the provider class and instantiate
-                 from akita.cli.main import get_model # Helper to get configured model
+                 from axion.cli.main import get_model # Helper to get configured model
                  
                  # This might fail if key env var is missing
                  # We want to catch that gracefully

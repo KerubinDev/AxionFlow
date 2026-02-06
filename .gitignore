@@ -116,9 +116,9 @@ ENV/
 env.bak/
 venv.bak/
 
-# AkitaLLM Specific
+# Axion Specific
 # Local user configuration should not be versioned
-.akita/
+.axion/
 config.toml
 
 # IDEs

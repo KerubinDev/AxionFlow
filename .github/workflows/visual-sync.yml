@@ -10,7 +10,7 @@ on:
 jobs:
   analyze-and-sync:
     runs-on: ubuntu-latest
-    if: github.repository == 'KerubinDev/AkitaLLM'
+    if: github.repository == 'KerubinDev/Axion'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -29,6 +29,6 @@ jobs:
 
       - name: Run Visual Sync Analyzer
         env:
-          AKITA_API_KEY: ${{ secrets.AKITA_API_KEY }}
+          AXION_API_KEY: ${{ secrets.AXION_API_KEY }}
           VISUAL_REPO_TOKEN: ${{ secrets.VISUAL_REPO_TOKEN }}
         run: python scripts/visual_sync_analyzer.py

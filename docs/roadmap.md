@@ -1,6 +1,6 @@
 # Roadmap: The Path to v1.0.0
 
-This document outlines the strategic steps required to transition AkitaLLM from Beta to a stable, production-ready v1.0.0.
+This document outlines the strategic steps required to transition Axion from Beta to a stable, production-ready v1.0.0.
 
 ## Phase 1: Robust Execution (The Core)
 - [x] **Complete DiffApplier**: Implement full Unified Diff application with rollback capabilities.
@@ -15,7 +15,7 @@ This document outlines the strategic steps required to transition AkitaLLM from 
 ## Phase 3: Plugin Architecture (Extensibility)
 - [x] **Plugin Engine**: Implement a plugin system using Python `entry_points`.
 - [x] **Core Plugins**: Move standard tools (Linter, Git) to a plugin-based internal structure.
-- [x] **Third-Party Support**: Create a SDK/Template for developers to build their own AkitaLLM plugins.
+- [x] **Third-Party Support**: Create a SDK/Template for developers to build their own Axion plugins.
 
 ## Phase 4: Interactive Feedback Loop
 - [x] **Human Review**: Allow users to review/edit the generated diff before application.
@@ -23,7 +23,7 @@ This document outlines the strategic steps required to transition AkitaLLM from 
 - [x] **Stateful Chat**: Enable follow-up questions to refine a solution.
 
 ## Phase 5: Production and Enterprise Grade
-- [x] **Binary Releases**: Compile AkitaLLM as standalone binaries (Windows, Linux, macOS).
+- [x] **Binary Releases**: Compile Axion as standalone binaries (Windows, Linux, macOS).
 - [x] **Local Search (LiteRAG)**: Integrate local semantic search for high-performance context retrieval.
 - [x] **Comprehensive Documentation Site**: Professional technical documentation outside of GitHub.
 

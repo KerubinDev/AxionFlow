@@ -1,8 +1,8 @@
 import pytest
-from axion.core.plugins import PluginManager, AkitaPlugin
+from axion.core.plugins import PluginManager, AxionPlugin
 from typing import List, Dict, Any
 
-class MockPlugin(AkitaPlugin):
+class MockPlugin(AxionPlugin):
     @property
     def name(self) -> str:
         return "mock"

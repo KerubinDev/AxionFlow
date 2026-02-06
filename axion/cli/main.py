@@ -36,7 +36,7 @@ def main(
     dry_run: bool = typer.Option(False, "--dry-run", help="Run without making any changes.")
 ):
     """
-    AkitaLLM orchestrates LLMs to help you code with confidence.
+    Axion orchestrates LLMs to help you code with confidence.
     """
     # Skip onboarding for the config command itself
     if ctx.invoked_subcommand == "config":
@@ -131,7 +131,7 @@ def run_onboarding():
     console.print(t("onboarding.saved"))
     console.print(f"Model: [bold]{selected_model}[/]")
     console.print(f"Key reference: [dim]{final_key_ref}[/]")
-    console.print(t("onboarding.saved_location", path="~/.akita/config.toml"))
+    console.print(t("onboarding.saved_location", path="~/.axion/config.toml"))
 
 @app.command()
 def review(
@@ -143,7 +143,7 @@ def review(
     """
     model = get_model()
     engine = ReasoningEngine(model)
-    console.print(Panel(f"[bold blue]Akita[/] is reviewing: [yellow]{path}[/]", title="Review Mode"))
+    console.print(Panel(f"[bold blue]Axion[/] is reviewing: [yellow]{path}[/]", title="Review Mode"))
     
     if dry_run:
         console.print("[yellow]Dry-run: Context would be built and LLM would be called.[/]")
@@ -189,7 +189,7 @@ def review(
 
 @app.command()
 def solve(
-    query: Optional[str] = typer.Argument(None, help="The task for Akita to solve."),
+    query: Optional[str] = typer.Argument(None, help="The task for Axion to solve."),
     interactive: bool = typer.Option(False, "--interactive", "-i", help="Run in interactive mode to refine the solution."),
     trace: bool = typer.Option(False, "--trace", help="Show the internal reasoning trace."),
     dry_run: bool = typer.Option(False, "--dry-run", help="Run in dry-run mode.")
@@ -222,7 +222,7 @@ def solve(
 
     model = get_model()
     engine = ReasoningEngine(model)
-    console.print(Panel(f"[bold blue]Akita[/] is thinking about: [italic]{query}[/]", title=t("solve.mode_title")))
+    console.print(Panel(f"[bold blue]Axion[/] is thinking about: [italic]{query}[/]", title=t("solve.mode_title")))
     
     current_query = query
     session = None
@@ -297,7 +297,7 @@ def plan(
     """
     model = get_model()
     engine = ReasoningEngine(model)
-    console.print(Panel(f"[bold blue]Akita[/] is planning: [yellow]{goal}[/]", title="Plan Mode"))
+    console.print(Panel(f"[bold blue]Axion[/] is planning: [yellow]{goal}[/]", title="Plan Mode"))
     
     try:
         plan_output = engine.run_plan(goal)
@@ -313,9 +313,9 @@ def clone(
     depth: Optional[int] = typer.Option(None, "--depth", "-d", help="Create a shallow clone with a history truncated to the specified number of commits.")
 ):
     """
-    Clone a remote Git repository into the Akita workspace (~/.akita/repos/).
+    Clone a remote Git repository into the Axion workspace (~/.axion/repos/).
     """
-    console.print(Panel(f"🌐 [bold blue]Akita[/] is cloning: [yellow]{url}[/]", title="Clone Mode"))
+    console.print(Panel(f"🌐 [bold blue]Axion[/] is cloning: [yellow]{url}[/]", title="Clone Mode"))
     
     try:
         with console.status("[bold green]Cloning repository..."):
@@ -336,7 +336,7 @@ def index(
     """
     Build a local vector index (RAG) for the project.
     """
-    console.print(Panel(f"🔍 [bold blue]Akita[/] is indexing: [yellow]{path}[/]", title="Index Mode"))
+    console.print(Panel(f"🔍 [bold blue]Axion[/] is indexing: [yellow]{path}[/]", title="Index Mode"))
     try:
         indexer = CodeIndexer(path)
         with console.status("[bold green]Indexing project files..."):
@@ -351,8 +351,8 @@ def test():
     """
     Run automated tests in the project.
     """
-    console.print(Panel("[bold blue]Akita[/] is running tests...", title="Test Mode"))
-    from akita.tools.base import ShellTools
+    console.print(Panel("[bold blue]Axion[/] is running tests...", title="Test Mode"))
+    from axion.tools.base import ShellTools
     result = ShellTools.execute("pytest")
     if result.success:
         console.print("[bold green]Tests passed![/]")
@@ -369,7 +369,7 @@ def docs():
     import subprocess
     import sys
     
-    console.print(Panel("[bold blue]Akita[/] Documentation", title="Docs Mode"))
+    console.print(Panel("[bold blue]Axion[/] Documentation", title="Docs Mode"))
     console.print("[dim]Starting MkDocs server...[/]")
     console.print("[bold green]Open your browser at: http://127.0.0.1:8000[/]")
     
@@ -382,13 +382,13 @@ def docs():
         console.print("[yellow]Documentation server stopped.[/]")
 
 # Config Command Group
-config_app = typer.Typer(help="Manage AkitaLLM configuration.")
+config_app = typer.Typer(help="Manage Axion configuration.")
 app.add_typer(config_app, name="config")
 
 @config_app.callback(invoke_without_command=True)
 def main_config(ctx: typer.Context):
     """
-    Manage AkitaLLM configuration via interactive menu.
+    Manage Axion configuration via interactive menu.
     """
     if ctx.invoked_subcommand:
         return
@@ -444,7 +444,7 @@ if __name__ == "__main__":
         app()
     except Exception as e:
         # Check for debug flags in args since typer might not have fully parsed yet if it crashed early
-        debug_mode = os.environ.get("AKITA_DEBUG", "").strip() == "1"
+        debug_mode = os.environ.get("AXION_DEBUG", "").strip() == "1"
         if "--debug" in sys.argv or debug_mode:
             console.print_exception(show_locals=True)
         else:

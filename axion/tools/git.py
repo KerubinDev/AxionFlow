@@ -3,11 +3,11 @@ import pathlib
 import subprocess
 from typing import Tuple, Optional
 from urllib.parse import urlparse
-from akita.core.config import CONFIG_DIR
+from axion.core.config import CONFIG_DIR
 
 class GitTool:
     """
-    Utility for managing Git repositories within the Akita ecosystem.
+    Utility for managing Git repositories within the Axion ecosystem.
     """
     REPOS_DIR = CONFIG_DIR / "repos"
 
@@ -49,7 +49,7 @@ class GitTool:
     @classmethod
     def clone_repo(cls, url: str, branch: Optional[str] = None, depth: Optional[int] = None) -> str:
         """
-        Clones a repository to ~/.akita/repos/<owner>/<repo>.
+        Clones a repository to ~/.axion/repos/<owner>/<repo>.
         Returns the local path.
         """
         owner, repo = cls.parse_repo_url(url)

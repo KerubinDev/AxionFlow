@@ -33,8 +33,8 @@ class ContextBuilder:
         
         if self.use_semantical_context:
             try:
-                from akita.core.ast_utils import ASTParser
-                from akita.core.indexing import CodeIndexer
+                from axion.core.ast_utils import ASTParser
+                from axion.core.indexing import CodeIndexer
                 self.ast_parser = ASTParser()
                 self.indexer = CodeIndexer(str(self.base_path))
             except ImportError:

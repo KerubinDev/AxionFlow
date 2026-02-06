@@ -1,6 +1,6 @@
-# Welcome to AkitaLLM
+# Welcome to Axion
 
-**AkitaLLM** is a local-first AI orchestrator designed for programmers who value privacy, speed, and precision. Inspired by the "Akitando" philosophy, it focuses on understanding the tools and providing high-quality code changes.
+**Axion** is a local-first AI orchestrator designed for programmers who value privacy, speed, and precision. Inspired by the "Axionndo" philosophy, it focuses on understanding the tools and providing high-quality code changes.
 
 ## Key Features
 - **Local AST Analysis**: Deep understanding of your Python code using Tree-sitter.
@@ -12,4 +12,4 @@
 ## Philosophy
 > "Don't just code. Understand the system."
 
-AkitaLLM doesn't just generate text; it analyzes your project's structure and semantics to provide contextually relevant solutions.
+Axion doesn't just generate text; it analyzes your project's structure and semantics to provide contextually relevant solutions.

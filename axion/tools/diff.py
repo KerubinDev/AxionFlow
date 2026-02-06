@@ -42,7 +42,7 @@ class DiffApplier:
             return False
 
         base = Path(base_path)
-        backup_dir = base / ".akita" / "backups"
+        backup_dir = base / ".axion" / "backups"
         
         # --- PHASE 1: PRE-FLIGHT VALIDATION (DRY RUN) ---
         print("🛡️  Running Structural Guard (Dry Run)...")

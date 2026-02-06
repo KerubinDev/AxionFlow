@@ -22,9 +22,9 @@ def get_git_diff() -> str:
 
 def analyze_diff_with_llm(diff_text: str) -> Optional[Dict[str, Any]]:
     """Sends the diff to an LLM for analysis."""
-    api_key = os.environ.get("AKITA_API_KEY")
+    api_key = os.environ.get("AXION_API_KEY")
     if not api_key:
-        print("AKITA_API_KEY not found in environment.")
+        print("AXION_API_KEY not found in environment.")
         return None
 
     prompt = f"""
@@ -87,7 +87,7 @@ Saída (formato obrigatório em JSON):
 def create_github_issue(issue_data: Dict[str, Any]):
     """Creates an issue in the visual repository."""
     token = os.environ.get("VISUAL_REPO_TOKEN")
-    repo = "KerubinDev/AkitaLLM-Visual"
+    repo = "KerubinDev/Axion-Visual"
     
     if not token:
         print("VISUAL_REPO_TOKEN not found.")

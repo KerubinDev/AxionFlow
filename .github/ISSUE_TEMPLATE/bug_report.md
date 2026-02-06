@@ -18,7 +18,7 @@ A clear and concise description of what you expected to happen.
 ## Environment:
 - OS: (e.g. Windows 11, Ubuntu 22.04)
 - Python Version: (e.g. 3.10)
-- AkitaLLM Version: (e.g. 0.1.0)
+- Axion Version: (e.g. 0.1.0)
 - LLM Provider/Model: (e.g. Ollama/Llama3)
 
 ## Additional Context
