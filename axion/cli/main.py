@@ -19,6 +19,12 @@ from axion.core.providers import detect_provider
 from axion.core.i18n import t
 from axion.cli.doctor import doctor_app
 
+# Exit Codes
+EXIT_SUCCESS = 0
+EXIT_ERROR = 1
+EXIT_EXECUTION_FAILED = 2
+EXIT_VALIDATION_REJECTED = 3
+
 # Load environment variables from local .env
 load_dotenv()
 
@@ -199,9 +205,15 @@ def review(
         color = "red" if result.risk_level == "high" else "yellow" if result.risk_level == "medium" else "green"
         console.print(Panel(f"Resulting Risk Level: [{color} bold]{result.risk_level.upper()}[/]", expand=False))
 
+        # Show Report
+        console.print(engine.trace.get_report_table())
+        raise typer.Exit(code=EXIT_SUCCESS)
+
     except Exception as e:
         console.print(f"[bold red]Review failed:[/] {e}")
-        raise typer.Exit(code=1)
+        if 'engine' in locals():
+            console.print(engine.trace.get_report_table())
+        raise typer.Exit(code=EXIT_ERROR)
 
 @app.command()
 def solve(
@@ -278,14 +290,19 @@ def solve(
             if interactive:
                 action = typer.prompt(t("solve.interactive_prompt"), default="A").upper()
                 if action == "A":
+                    engine.trace.add_step("Finalize", "User accepted the solution")
                     break
                 elif action == "R":
+                    engine.trace.add_step("Refine", "User requested refinement")
                     current_query = typer.prompt(t("solve.refine_prompt"))
                     continue
                 else:
+                    engine.trace.add_step("Discard", "User rejected the solution", status="FAIL")
                     console.print(t("solve.cancelled"))
-                    return
+                    console.print(engine.trace.get_report_table())
+                    raise typer.Exit(code=EXIT_VALIDATION_REJECTED)
             else:
+                engine.trace.add_step("Finalize", "Auto-accepting solution (non-interactive)")
                 break
 
         if not dry_run:
@@ -294,14 +311,28 @@ def solve(
                 console.print(t("solve.applying"))
                 success = DiffApplier.apply_unified_diff(diff_output)
                 if success:
+                    engine.trace.add_step("Apply", "Diff applied successfully")
                     console.print(t("solve.success"))
                 else:
+                    engine.trace.add_step("Apply", "Failed to apply diff", status="FAIL")
                     console.print(t("solve.failed"))
+                    console.print(engine.trace.get_report_table())
+                    raise typer.Exit(code=EXIT_EXECUTION_FAILED)
             else:
+                engine.trace.add_step("Discard", "User declined to apply changes", status="SKIPPED")
                 console.print(t("solve.discarded"))
+                console.print(engine.trace.get_report_table())
+                raise typer.Exit(code=EXIT_VALIDATION_REJECTED)
+        
+        console.print(engine.trace.get_report_table())
+        raise typer.Exit(code=EXIT_SUCCESS)
+
     except Exception as e:
         console.print(t("error.solve_failed", error=e))
-        raise typer.Exit(code=1)
+        if 'engine' in locals():
+            engine.trace.add_step("Error", str(e), status="FAIL")
+            console.print(engine.trace.get_report_table())
+        raise typer.Exit(code=EXIT_ERROR)
 
 @app.command()
 def plan(
@@ -318,9 +349,13 @@ def plan(
     try:
         plan_output = engine.run_plan(goal)
         console.print(Markdown(plan_output))
+        console.print(engine.trace.get_report_table())
+        raise typer.Exit(code=EXIT_SUCCESS)
     except Exception as e:
         console.print(f"[bold red]Planning failed:[/] {e}")
-        raise typer.Exit(code=1)
+        if 'engine' in locals():
+            console.print(engine.trace.get_report_table())
+        raise typer.Exit(code=EXIT_ERROR)
 
 @app.command()
 def clone(
@@ -466,7 +501,7 @@ if __name__ == "__main__":
         else:
             console.print(Panel(
                 f"{t('error.global_title')}: {str(e)}\n\n{t('error.global_hint')}",
-                title="💥 Oops",
+                title="Oops",
                 border_style="red"
             ))
-        sys.exit(1)
+        sys.exit(EXIT_ERROR)

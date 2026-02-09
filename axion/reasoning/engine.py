@@ -25,14 +25,17 @@ class ReasoningEngine:
         """
         Executes a real code review for the given path.
         """
-        console.print(f"🔍 [bold]Building context for path:[/] [yellow]{path}[/]")
+        self.trace.add_step("Context", f"Building context for path: {path}")
+        console.print(f"[bold]Building context for path:[/] [yellow]{path}[/]")
         builder = ContextBuilder(path)
         snapshot = builder.build()
         
         if not snapshot.files:
+            self.trace.add_step("Context", "No files found", status="FAIL")
             raise ValueError(f"No relevant files found in {path}")
 
-        console.print(f"📄 [dim]Analyzing {len(snapshot.files)} files...[/]")
+        self.trace.add_step("Analysis", f"Analyzing {len(snapshot.files)} files")
+        console.print(f"[dim]Analyzing {len(snapshot.files)} files...[/]")
         
         # Build prompt
         files_str = "\n---\n".join([f"FILE: {f.path}\nCONTENT:\n{f.content}" for f in snapshot.files])
@@ -59,7 +62,8 @@ class ReasoningEngine:
             "}"
         )
 
-        console.print("🤖 [bold blue]Calling LLM for analysis...[/]")
+        console.print("[bold blue]Calling LLM for analysis...[/]")
+        self.trace.add_step("LLM", "Requesting review from model")
         response = self.model.chat([
             {"role": "system", "content": system_prompt}, # Note: LiteLLM handles system messages differently sometimes, but 'system' role is standard
             {"role": "user", "content": user_prompt}
@@ -84,16 +88,19 @@ class ReasoningEngine:
         """
         Generates a technical plan for a given goal based on project context.
         """
-        console.print(f"🔍 [bold]Building context for planning...[/]")
+        self.trace.add_step("Context", "Building context for planning")
+        console.print(f"[bold]Building context for planning...[/]")
         builder = ContextBuilder(path)
         snapshot = builder.build()
         
+        self.trace.add_step("Analysis", f"Context built with {len(snapshot.files)} files")
         files_str = "\n---\n".join([f"FILE: {f.path}\nCONTENT:\n{f.content}" for f in snapshot.files[:20]]) # Limit for plan
         
         system_prompt = "You are an Expert Technical Architect. Design a clear, step-by-step implementation plan for the requested goal."
         user_prompt = f"Goal: {goal}\n\nProject Structure:\n{snapshot.project_structure}\n\nRelevant Files:\n{files_str}\n\nProvide a technical plan in Markdown."
         
-        console.print("🤖 [bold yellow]Generating plan...[/]")
+        console.print("[bold yellow]Generating plan...[/]")
+        self.trace.add_step("LLM", "Generating technical plan")
         response = self.model.chat([
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
@@ -179,28 +186,33 @@ class ReasoningEngine:
         3. Execute
         4. Validate
         """
-        console.print(f"🚀 [bold]Starting task:[/] {task}")
+        self.trace.add_step("Pipeline", f"Starting pipeline for task: {task}")
+        console.print(f"[bold]Starting task:[/] {task}")
         
         # 1. Analyze
         analysis = self._analyze(task)
-        console.print(f"📝 [bold blue]Analysis:[/] {analysis[:100]}...")
+        self.trace.add_step("Analyze", "Requirements analyzed")
+        console.print(f"[bold blue]Analysis:[/] {analysis[:100]}...")
         
         # 2. Plan
         plan = self._plan(analysis)
-        console.print(f"📅 [bold yellow]Plan:[/] {plan[:100]}...")
+        self.trace.add_step("Plan", "Technical plan created")
+        console.print(f"[bold yellow]Plan:[/] {plan[:100]}...")
         
         # 3. Execute
         execution_results = self._execute(plan)
-        console.print(f"⚙️ [bold green]Execution completed.[/]")
+        self.trace.add_step("Execute", "Changes generated")
+        console.print(f"[bold green]Execution completed.[/]")
         
         # 4. Validate
         validation = self._validate(execution_results)
-        console.print(f"✅ [bold magenta]Validation:[/] {validation}")
+        self.trace.add_step("Validate", "Changes validated")
+        console.print(f"[bold magenta]Validation:[/] {validation}")
         
         return validation
 
     def _analyze(self, task: str) -> str:
-        console.print("🔍 [dim]Analyzing requirements...[/]")
+        console.print("[dim]Analyzing requirements...[/]")
         prompt = f"Analyze the following task and identify requirements for a programming solution: {task}. Return a concise summary."
         try:
             # We try to use the model, but fallback to a default if it fails (e.g. no API key)
@@ -211,17 +223,17 @@ class ReasoningEngine:
             return f"Analyzed task: {task}"
 
     def _plan(self, analysis: str) -> str:
-        console.print("📋 [dim]Creating execution plan...[/]")
+        console.print("[dim]Creating execution plan...[/]")
         return "1. Identify target files\n2. Design changes\n3. Generate diff"
 
     def _execute(self, plan: str) -> Any:
-        console.print("🚀 [dim]Executing plan...[/]")
+        console.print("[dim]Executing plan...[/]")
         # Placeholder for diff generation
         diff = "--- main.py\n+++ main.py\n@@ -1,1 +1,2 @@\n-print('hello')\n+print('hello world')\n+print('Axion was here')"
         return {"diff": diff}
 
     def _validate(self, results: Any) -> str:
-        console.print("🧪 [dim]Validating changes...[/]")
+        console.print("[dim]Validating changes...[/]")
         # Check if pytest is available and run it
         check = ShellTools.execute("pytest --version")
         if check.success:
