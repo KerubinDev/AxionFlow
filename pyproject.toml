@@ -1,6 +1,6 @@
 [project]
 name = "axionflow"
-version = "1.3.6"
+version = "1.4.0"
 description = "Axion: An open-source local-first AI system for programming."
 authors = [{ name = "KerubinDev" }]
 readme = "README.md"
@@ -46,6 +46,8 @@ build-backend = "setuptools.build_meta"
 
 [project.entry-points."axion.plugins"]
 files = "axion.plugins.files:FilesPlugin"
+council = "axion.plugins.council.plugin:CouncilPlugin"
+automode = "axion.plugins.automode.plugin:AutoModePlugin"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

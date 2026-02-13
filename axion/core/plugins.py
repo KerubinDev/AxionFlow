@@ -79,3 +79,30 @@ class PluginManager:
         for plugin in self.plugins.values():
             all_tools.extend(plugin.get_tools())
         return all_tools
+
+    def get_tools_schema(self) -> List[Dict[str, Any]]:
+        """Convert tools to OpenAI/LiteLLM tool schema format."""
+        schemas = []
+        for tool in self.get_all_tools():
+            # Basic mapping from our simple param dict to JSON Schema
+            properties = {}
+            required = []
+            for param_name, param_type in tool.get("parameters", {}).items():
+                # Default to string if type is unknown
+                json_type = "string" if param_type == "string" else "number" if param_type in ("float", "integer", "number") else "boolean" if param_type == "boolean" else "array" if param_type == "array" else "object"
+                properties[param_name] = {"type": json_type}
+                required.append(param_name)
+
+            schemas.append({
+                "type": "function",
+                "function": {
+                    "name": tool["name"],
+                    "description": tool["description"],
+                    "parameters": {
+                        "type": "object",
+                        "properties": properties,
+                        "required": required
+                    }
+                }
+            })
+        return schemas

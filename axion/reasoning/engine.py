@@ -4,7 +4,7 @@ from axion.tools.base import ShellTools
 from axion.core.plugins import PluginManager
 from axion.tools.context import ContextBuilder
 from axion.schemas.review import ReviewResult
-from axion.core.trace import ReasoningTrace
+from axion.core.trace import ReasoningTrace, set_current_trace
 from axion.reasoning.session import ConversationSession
 import json
 from axion.core.i18n import t
@@ -19,6 +19,7 @@ class ReasoningEngine:
         self.plugin_manager = PluginManager()
         self.plugin_manager.discover_all()
         self.trace = ReasoningTrace()
+        set_current_trace(self.trace)
         self.session: Optional[ConversationSession] = None
 
     def run_review(self, path: str) -> ReviewResult:
@@ -142,41 +143,92 @@ class ReasoningEngine:
         else:
             session.add_message("user", query)
 
-        # --- ROBUST EXECUTION ---
-        try:
-            console.print(t("solve.thinking"))
-            response = self.model.chat(session.get_messages_dict())
-        except pydantic.ValidationError as e:
-            # Friendly error for output contract violations
-            error_msg = t("error.validation", type=str(e))
-            console.print(f"[bold red]{error_msg}[/]")
-            # Log debug info if needed
-            raise ValueError(error_msg)
-        except Exception as e:
-            if "validation error" in str(e).lower():
-                 error_msg = t("error.validation", type="ModelResponse")
-                 console.print(f"[bold red]{error_msg}[/]")
-                 raise ValueError(error_msg)
-            raise e
+        # --- AGENTIC EXECUTION LOOP ---
+        max_tool_iterations = 10
+        tool_iterations = 0
         
-        # --- CONTRACT ENFORCEMENT ---
-        if not isinstance(response.content, str):
-            error_msg = t("error.validation", type=type(response.content))
-            console.print(f"[bold red]{error_msg}[/]")
-            raise ValueError(error_msg)
-            
-        if "+++" not in response.content or "---" not in response.content:
-             # Relaxed check: Sometimes it's a valid string but forgets headers? 
-             # No, strictly require headers for safety.
-             error_msg = "Solve aborted: Model returned content without Unified Diff headers (+++/---)."
-             console.print(f"[bold red]{error_msg}[/]")
-             console.print(f"[dim]Output start: {response.content[:100]}...[/]")
-             raise ValueError(error_msg)
+        while tool_iterations < max_tool_iterations:
+            tool_iterations += 1
+            try:
+                console.print(t("solve.thinking"))
+                # Get current tool schemas
+                tools_schema = self.plugin_manager.get_tools_schema()
+                
+                # Chat with tools
+                kwargs = {}
+                if tools_schema:
+                    kwargs["tools"] = tools_schema
+                    kwargs["tool_choice"] = "auto"
+                
+                response = self.model.chat(session.get_messages_dict(), **kwargs)
+                
+                # Check for tool calls in the raw response
+                raw_message = response.raw.choices[0].message
+                tool_calls = getattr(raw_message, "tool_calls", None)
+                
+                if tool_calls:
+                    # 1. Add the assistant's tool call message to history
+                    session.add_message("assistant", response.content, tool_calls=tool_calls)
+                    
+                    # 2. Execute each tool
+                    for tool_call in tool_calls:
+                        func_name = tool_call.function.name
+                        func_args = json.loads(tool_call.function.arguments)
+                        
+                        self.trace.add_step("Tool Call", f"Executing {func_name}", metadata={"args": func_args})
+                        console.print(f"[bold cyan]Tool Call:[/] [yellow]{func_name}({func_args})[/]")
+                        
+                        # Find the tool
+                        tool_found = False
+                        for t_def in self.plugin_manager.get_all_tools():
+                            if t_def["name"] == func_name:
+                                try:
+                                    result = t_def["func"](**func_args)
+                                    status = "OK"
+                                except Exception as e:
+                                    result = f"Error executing tool {func_name}: {e}"
+                                    status = "FAIL"
+                                
+                                session.add_message("tool", str(result), name=func_name, tool_call_id=tool_call.id)
+                                self.trace.add_step("Tool Result", f"Result from {func_name}", status=status, metadata={"result": str(result)[:200]})
+                                tool_found = True
+                                break
+                        
+                        if not tool_found:
+                            session.add_message("tool", f"Error: Tool {func_name} not found.", name=func_name, tool_call_id=tool_call.id)
+                    
+                    # Continue the loop to let the model process results
+                    continue
+                
+                # No more tool calls, we have a final response
+                if not response.content:
+                    raise ValueError("Model returned an empty response.")
+                
+                # --- CONTRACT ENFORCEMENT ---
+                if "+++" not in response.content or "---" not in response.content:
+                     # If the model is just talking, we might want to encourage it to reach a solution
+                     # but for now we follow the existing strict requirement.
+                     error_msg = "Solve aborted: Model returned content without Unified Diff headers (+++/---)."
+                     console.print(f"[bold red]{error_msg}[/]")
+                     console.print(f"[dim]Output start: {response.content[:100]}...[/]")
+                     raise ValueError(error_msg)
 
-        session.add_message("assistant", response.content)
+                session.add_message("assistant", response.content)
+                self.trace.add_step("LLM Response", "Received solution from model")
+                return response.content
+                
+            except pydantic.ValidationError as e:
+                error_msg = t("error.validation", type=str(e))
+                console.print(f"[bold red]{error_msg}[/]")
+                raise ValueError(error_msg)
+            except Exception as e:
+                if "validation error" in str(e).lower():
+                     error_msg = t("error.validation", type="ModelResponse")
+                     console.print(f"[bold red]{error_msg}[/]")
+                     raise ValueError(error_msg)
+                raise e
         
-        self.trace.add_step("LLM Response", "Received solution from model")
-        return response.content
+        raise ValueError(f"Exceeded maximum tool iterations ({max_tool_iterations})")
 
     def run_pipeline(self, task: str):
         """

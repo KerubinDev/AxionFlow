@@ -5,6 +5,16 @@ from pydantic import BaseModel, Field
 from rich.table import Table
 from rich.console import Console
 
+
+_current_trace = None
+
+def get_current_trace():
+    return _current_trace
+
+def set_current_trace(trace):
+    global _current_trace
+    _current_trace = trace
+
 class TraceStep(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.now)
     perf_time: float = Field(default_factory=time.perf_counter)

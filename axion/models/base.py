@@ -18,7 +18,7 @@ class AIModel:
         self.base_url = base_url
         self.temperature = temperature
 
-    def chat(self, messages: List[Dict[str, str]], **kwargs) -> ModelResponse:
+    def chat(self, messages: List[Dict[str, Any]], **kwargs) -> ModelResponse:
         """
         Send a chat completion request.
         """
@@ -33,7 +33,9 @@ class AIModel:
             base_url=self.base_url,
             **request_kwargs
         )
-        content = response.choices[0].message.content
+        
+        message = response.choices[0].message
+        content = message.content or ""
         return ModelResponse(content=content, raw=response)
 
 def get_model(model_name: Optional[str] = None) -> AIModel:
