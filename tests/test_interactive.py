@@ -1,14 +1,25 @@
 import pytest
 from axion.reasoning.engine import ReasoningEngine
 from axion.reasoning.session import ConversationSession
-from axion.models.base import AIModel
+from axion.models.base import AIModel, ModelResponse
 
 class MockModel(AIModel):
-    def chat(self, messages):
+    def chat(self, messages, **kwargs):
         # Respond with a fixed diff
-        return type('obj', (object,), {
-            'content': '--- a/f.py\n+++ b/f.py\n@@ -1,1 +1,1 @@\n-old\n+new'
+        mock_raw = type('obj', (object,), {
+            'choices': [
+                type('obj', (object,), {
+                    'message': type('obj', (object,), {
+                        'content': '--- a/f.py\n+++ b/f.py\n@@ -1,1 +1,1 @@\n-old\n+new',
+                        'tool_calls': None
+                    })()
+                })()
+            ]
         })()
+        return ModelResponse(
+            content='--- a/f.py\n+++ b/f.py\n@@ -1,1 +1,1 @@\n-old\n+new',
+            raw=mock_raw
+        )
 
 def test_interactive_session_state():
     model = MockModel(model_name="test")
@@ -17,7 +28,8 @@ def test_interactive_session_state():
     # 1. First call creates session
     engine.run_solve("Initial task")
     assert engine.session is not None
-    assert len(engine.session.messages) == 3 # system, user, assistant
+    # system, user, assistant
+    assert len(engine.session.messages) == 3
     
     # 2. Second call with session refinement
     engine.run_solve("Refinement task", session=engine.session)
